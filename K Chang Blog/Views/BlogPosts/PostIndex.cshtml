@@ -1,0 +1,143 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@using K_Chang_Blog.Models;
+@model PagedList.IPagedList<BlogPost>
+
+@{
+    ViewBag.Title = "PubIndex";
+}
+
+<header role="banner">
+    <div class="top-bar">
+        <div class="container">
+            <div class="row">
+                <div class="col-9">
+
+                </div>
+                <div class="col-3 search-top">
+                    <form action="#" class="search-top-form">
+                        <span class="icon fa fa-search"></span>
+                        <input type="text" id="s" placeholder="Type keyword to search...">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container logo-wrap">
+        <div class="row pt-5">
+            <div class="col-12 text-center">
+                <a class="absolute-toggle d-block d-md-none" data-toggle="collapse" href="#navbarMenu" role="button" aria-expanded="false" aria-controls="navbarMenu"><span class="burger-lines"></span></a>
+                <h1 class="site-logo">BLOG</h1>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-md  navbar-light bg-light">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="navbarMenu">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a href="~/">Home</a>
+                    </li>
+                    <li>
+                        <p>&#183</p>
+                    </li>
+                    <li class="nav-item">
+                        <a href="~/Home/About">About</a>
+                    </li>
+                    <li>
+                        <p>&#183</p>
+                    </li>
+                    <li class="nav-item">
+                        <a href="~/Home/Contact">Contact</a>
+                    </li>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <li>
+                            <p>&#183</p>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Account/Login">Login</a>
+                        </li>
+                        <li>
+                            <p>&#183</p>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Account/Register">Register</a>
+                        </li>
+                    }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>
+                            <p>&#183</p>
+                        </li>
+                        <li>
+                            <p>View Published Posts</p>
+                        </li>
+                        <li>
+                            <p>&#183</p>
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("View All Posts", "Index", "BlogPosts")
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<h2>Index</h2>
+
+<p>
+    <div class="col pl-3 pr-3">@Html.ActionLink("Create New", "Create")</div>
+    <div class="col pl-3 pr-3">@Html.ActionLink("Edit", "Edit")</div>
+    <div class="col pl-3 pr-3">@Html.ActionLink("Delete", "Delete")</div>
+    <div class="col pl-3 pr-3">@Html.ActionLink("Details", "Details")</div>
+</p>
+<table class="table">
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Created)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Updated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Slug)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Abstract)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BlogPostBody)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImagePath)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Published)
+            </td>
+            <td>
+            </td>
+        </tr>
+    }
+
+</table>
+@section scripts{       @*puts section scripts into layout @rendersection*@
+<script src="~/Scripts/jquery-3.2.1.min.js"></script>
+<script src="~/Scripts/jquery-migrate-3.0.0.js"></script>
+<script src="~/Scripts/popper.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/owl.carousel.min.js"></script>
+<script src="~/Scripts/jquery.waypoints.min.js"></script>
+<script src="~/Scripts/jquery.stellar.min.js"></script>
+<script src="~/Scripts/main.js"></script>
+
+}

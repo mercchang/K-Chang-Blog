@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "NewRegister";
+}
+
+<header role="banner">
+    <div class="top-bar">
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+
+                </div>
+                <div class="col-6 search-top">
+                    <!-- <a href="#"><span class="fa fa-search"></span></a> -->
+                    @using (Html.BeginForm("Index", "BlogPosts", FormMethod.Get, htmlAttributes: new { @class = "form" }))
+                    {
+                        <div class="controls controls-row search-row">
+                            <input id="searchStr" name="searchStr" class="input-block-level" type="text" placeholder="Search...">
+                            <button id="searchStr" name="searchStr" class="btn-lg" type="submit">
+                                <i class="icon-search"></i>
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container logo-wrap">
+        <div class="row pt-5">
+            <div class="col-12 text-center">
+                <a class="absolute-toggle d-block d-md-none" data-toggle="collapse" href="#navbarMenu" role="button" aria-expanded="false" aria-controls="navbarMenu"><span class="burger-lines"></span></a>
+                <h1 class="site-logo">BLOG</h1>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-md  navbar-light bg-light">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="navbarMenu">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a href="~/">Home</a>
+                    </li>
+                    <li>
+                        <p>&#183</p>
+                    </li>
+                    <li class="nav-item">
+                        <a href="~/Home/About">About</a>
+                    </li>
+                    <li>
+                        <p>&#183</p>
+                    </li>
+                    <li class="nav-item">
+                        <a href="~/Home/Contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="col pt-3 pl-3">
+    <div class="row">
+        <h2>Account Registered</h2>
+    </div>
+    <hr />
+    <div class="row pb-5">
+        <p>
+            You have been registered! A confirmation email has been sent. Please check your inbox or click @Html.ActionLink("here to return Home!", "Index", "Home")
+        </p>
+    </div>
+</div>

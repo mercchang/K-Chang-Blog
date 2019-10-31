@@ -1,0 +1,109 @@
+﻿@model K_Chang_Blog.Models.ForgotPasswordViewModel
+@{
+    ViewBag.Title = "Forgot your password?";
+}
+
+<header role="banner">
+    <div class="top-bar">
+        <div class="container">
+            <div class="row">
+                <div class="col-9">
+
+                </div>
+                <div class="col-3 search-top">
+                    <!-- <a href="#"><span class="fa fa-search"></span></a> -->
+                    <form action="#" class="search-top-form">
+                        <span class="icon fa fa-search"></span>
+                        <input type="text" id="s" placeholder="Type keyword to search...">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container logo-wrap">
+        <div class="row pt-5">
+            <div class="col-12 text-center">
+                <a class="absolute-toggle d-block d-md-none" data-toggle="collapse" href="#navbarMenu" role="button" aria-expanded="false" aria-controls="navbarMenu"><span class="burger-lines"></span></a>
+                <h1 class="site-logo">BLOG</h1>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-md  navbar-light bg-light">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="navbarMenu">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a>Home</a>
+                    </li>
+                    <li>
+                        <p>&#183</p>
+                    </li>
+                    <li class="nav-item">
+                        <a href="~/Home/About">About</a>
+                    </li>
+                    <li>
+                        <p>&#183</p>
+                    </li>
+                    <li class="nav-item">
+                        <a href="~/Home/Contact">Contact</a>
+                    </li>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <li>
+                            <p>&#183</p>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Account/Login">Login</a>
+                        </li>
+                        <li>
+                            <p>&#183</p>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Account/Register">Register</a>
+                        </li>
+                    }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>
+                            <p>&#183</p>
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("View Published Posts", "PubIndex", "BlogPosts")
+                        </li>
+                        <li>
+                            <p>&#183</p>
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("View All Posts", "Index", "BlogPosts")
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+@using (Html.BeginForm("ResendEmailConfirmation", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Enter your email.</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Email Link" />
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

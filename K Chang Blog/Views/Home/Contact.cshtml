@@ -1,0 +1,215 @@
+﻿@model K_Chang_Blog.Models.EmailModel
+
+@{
+    ViewBag.Title = "Contact";
+}
+
+<header role="banner">
+    <div class="top-bar">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <!-- <a href="#"><span class="fa fa-search"></span></a> -->
+                    @using (Html.BeginForm("Index", "BlogPosts", FormMethod.Get, htmlAttributes: new { @class = "form" }))
+                    {
+                        <div class="controls controls-row search-row float-right">
+                            <input id="searchStr" name="searchStr" class="search-top-form" type="text" placeholder="Search...">
+                            <button id="searchStr" name="searchStr" type="submit"><i class="fa fa-search"></i></button>
+
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container logo-wrap">
+        <div class="row pt-5">
+            <div class="col-12 text-center">
+                <a class="absolute-toggle d-block d-md-none" data-toggle="collapse" href="#navbarMenu" role="button" aria-expanded="false" aria-controls="navbarMenu"><span class="burger-lines"></span></a>
+                <h1 class="site-logo">BLOG</h1>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-md  navbar-light bg-light">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="navbarMenu">
+                <ul class="navbar-nav mx-auto">
+                    <li>
+                        <a href="~/">Home</a>
+                    </li>
+                    <li>
+                        <p>&#183</p>
+                    </li>
+                    <li>
+                        <a href="~/Home/About">About</a>
+                    </li>
+                    <li>
+                        <p>&#183</p>
+                    </li>
+                    <li>
+                        <p>Contact</p>
+                    </li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li>
+                            <p>&#183</p>
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Manage Posts", "Index", "BlogPosts")
+                        </li>
+                    }
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <li>
+                            <p>&#183</p>
+                        </li>
+                        <li>
+                            <a href="~/Account/Login">Login</a>
+                        </li>
+                        <li>
+                            <p>&#183</p>
+                        </li>
+                        <li>
+                            <a href="~/Account/Register">Register</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <p>&#183</p>
+                        </li>
+                        <li>
+                            @Html.ActionLink("Log Out", "LogOut", "Account")
+                        </li>
+                    }
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="col-md-8">
+    <div class="row pt-3 pl-3">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <h4>Send Me an Email:</h4>
+            <hr />
+
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.FromName, new { @class = "col-md-2 control=label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.FromName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.FromName)
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.FromEmail, new { @class = "col-md-2 control=label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.FromEmail, new { @class = "form-control", placeholder = "Enter Email..." })
+                    @Html.ValidationMessageFor(m => m.FromEmail)
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Subject, new { @class = "col-md-2 control=label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Subject, new { @class = "form-control", placeholder = "Enter Subject..." })
+                    @Html.ValidationMessageFor(m => m.Subject)
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Body, new { @class = "col-md-2 control=label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Body, new { @class = "form-control", rows = 5, cols = 100 })
+                    @Html.ValidationMessageFor(m => m.Body)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" class="btn btn-primary" value="Send" />
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+<div class="col pl-4">
+    <div class="sidebar-box search-form-wrap">
+        <!--BLANK SPACE-->
+    </div>
+    <!-- END sidebar-box -->
+    <!--================CHANGE THIS TO LOGGED IN USER=================-->
+    <div class="sidebar-box">
+        <div class="bio text-center">
+            @if (User.IsInRole("Admin"))
+            {
+                <img src="~/Images/face.jpg" alt="Image Placeholder" class="img-fluid">
+            }
+            else if (User.Identity.IsAuthenticated)
+            {
+                <img src="~/Images/default-face.jpg" alt="Image Placeholder" class="img-fluid">
+            }
+            else
+            {
+                <img src="~/Images/default-face.jpg" alt="Image Placeholder" class="img-fluid">
+            }
+            <div class="bio-body">
+                <h2>@User.Identity.Name</h2>
+                @if (User.IsInRole("Admin"))
+                {
+                    <p>Administrator</p>
+                }
+                else if (User.IsInRole("Moderator"))
+                {
+                    <p>Moderator</p>
+                }
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <p>You are logged in</p>
+                }
+                else
+                {
+                    <p>Please log in to post a comment</p>
+                }
+
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <p><a href="~/Account/Login" class="btn btn-primary btn-sm rounded">Log In</a></p>
+                    <p><a href="~/Account/Register">Register</a></p>
+                }
+                else
+                {
+                    <p>@Html.ActionLink("Log Out", "LogOut", "Account", null, new { @class = "btn btn-primary btn-sm rounded" })</p>
+                    <p>@Html.ActionLink("Reset Password", "ResetPassword", "Account")</p>
+                }
+                @if (User.IsInRole("Admin"))
+                {
+                    @Html.ActionLink("Create New Post", "Create", "BlogPosts")
+                }
+
+            </div>
+        </div>
+    </div>
+    <!--===============================================================-->
+    <div class="sidebar-box">
+        <h3 class="heading">Categories</h3>
+        <ul class="categories">
+            <li><a href="#">Food <span>(12)</span></a></li>
+            <li><a href="#">Travel <span>(22)</span></a></li>
+            <li><a href="#">Lifestyle <span>(37)</span></a></li>
+            <li><a href="#">Business <span>(42)</span></a></li>
+            <li><a href="#">Adventure <span>(14)</span></a></li>
+        </ul>
+    </div>
+</div>

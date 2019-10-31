@@ -1,0 +1,247 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@using K_Chang_Blog.Models;
+@model IPagedList<BlogPost>
+@{
+    ViewBag.Title = "Home";
+}
+@if (User.IsInRole("Admin"))
+{
+    <header role="banner">
+        <div class="top-bar">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <!-- <a href="#"><span class="fa fa-search"></span></a> -->
+                        @using (Html.BeginForm("Index", "BlogPosts", FormMethod.Get, htmlAttributes: new { @class = "form" }))
+                        {
+                            <div class="controls controls-row search-row float-right">
+                                <input id="searchStr" name="searchStr" class="search-top-form" type="text" placeholder="Search...">
+                                <button id="searchStr" name="searchStr" type="submit"><i class="fa fa-search"></i></button>
+
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container logo-wrap">
+            <div class="row pt-5">
+                <div class="col-12 text-center">
+                    <a class="absolute-toggle d-block d-md-none" data-toggle="collapse" href="#navbarMenu" role="button" aria-expanded="false" aria-controls="navbarMenu"><span class="burger-lines"></span></a>
+                    <h1 class="site-logo">BLOG</h1>
+                </div>
+            </div>
+        </div>
+
+        <nav class="navbar navbar-expand-md  navbar-light bg-light">
+            <div class="container">
+                <div class="collapse navbar-collapse" id="navbarMenu">
+                    <ul class="navbar-nav mx-auto">
+                        <li>
+                            <a href="~/">Home</a>
+                        </li>
+                        <li>
+                            <p>&#183</p>
+                        </li>
+                        <li>
+                            <a href="~/Home/About">About</a>
+                        </li>
+                        <li>
+                            <p>&#183</p>
+                        </li>
+                        <li>
+                            <a href="~/Home/Contact">Contact</a>
+                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li>
+                                <p>&#183</p>
+                            </li>
+                            <li class="nav-item">
+                                <p>Manage All Posts</p>
+                            </li>
+                        }
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li>
+                                <p>&#183</p>
+                            </li>
+                            <li>
+                                <a href="~/Account/Login">Login</a>
+                            </li>
+                            <li>
+                                <p>&#183</p>
+                            </li>
+                            <li>
+                                <a href="~/Account/Register">Register</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <p>&#183</p>
+                            </li>
+                            <li>
+                                @Html.ActionLink("Log Out", "LogOut", "Account")
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    @* BlogPosts *@
+    <div class="col-md-8">
+        <!-- Top Image -->
+        <div class="container-fluid">
+            <div class="row pt-5 pb-5">
+                <img class="img-fluid" src="~/Images/bloghome.jpg" alt="Image placeholder">
+            </div>
+            <!-- END section -->
+            <!-- Blog Posts Section -->
+
+            <div class="row">
+                <div class="col">
+                    <h2 class="mb-4" style="text-align:center">ALL POSTS</h2>
+                </div>
+            </div>
+            <div class="row-md-5">
+                @foreach (var blogPost in Model)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <a href=@Url.Action("Details", "BlogPosts", new { slug = blogPost.Slug }) data-animate-effect="fadeIn">
+                                <div class="blog-content-body">
+                                    <div class="row">
+                                        <div class="post-meta">
+                                            <span class="author mr-2"><img src="~/Images/face.jpg" alt="Colorlib">   Colorlib</span>&bullet;
+                                            <span class="mr-2">@blogPost.Created </span> &bullet;
+                                            <span class="ml-2"><span class="fa fa-comments"></span> x comments</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <h3>@blogPost.Title</h3>
+                                    </div>
+                                    <div id="abstracttext" class="row">
+                                        @blogPost.Abstract
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="row pl-5 pb-lg-5">
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <div class="col pl-3 pr-3">@Html.ActionLink("Edit", "Edit", new { slug = blogPost.Slug })</div>
+                                    <div class="col pl-3 pr-3">@Html.ActionLink("Delete", "Delete", new { id = blogPost.Id })</div>
+                                }
+
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            </div>
+
+            <!-- Pages -->
+            <div class="row mt-5">
+                <div class="col-md-12 text-center">
+                    <nav aria-label="Page navigation" class="text-center">
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchStr = ViewBag.Search }))
+                        <div class="col pl-3 pr-3">@Html.ActionLink("Create New", "Create")</div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* SideBox *@
+    <div class="col pl-4">
+        <div class="sidebar-box search-form-wrap">
+            <!--BLANK SPACE-->
+        </div>
+        <!-- END sidebar-box -->
+        <!--================CHANGE THIS TO LOGGED IN USER=================-->
+        <div class="sidebar-box">
+            <div class="bio text-center">
+                @if (User.IsInRole("Admin"))
+                {
+                    <img src="~/Images/face.jpg" alt="Image Placeholder" class="img-fluid">
+                }
+                else if (User.Identity.IsAuthenticated)
+                {
+                    <img src="~/Images/default-face.jpg" alt="Image Placeholder" class="img-fluid">
+                }
+                else
+                {
+                    <img src="~/Images/default-face.jpg" alt="Image Placeholder" class="img-fluid">
+                }
+                <div class="bio-body">
+                    <h2>@User.Identity.Name</h2>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <p>Administrator</p>
+                    }
+                    else if (User.IsInRole("Moderator"))
+                    {
+                        <p>Moderator</p>
+                    }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <p>You are logged in</p>
+                    }
+                    else
+                    {
+                        <p>Please log in to post a comment</p>
+                    }
+
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <p><a href="~/Account/Login" class="btn btn-primary btn-sm rounded">Log In</a></p>
+                        <p><a href="~/Account/Register">Register</a></p>
+                    }
+                    else
+                    {
+                        <p>@Html.ActionLink("Log Out", "LogOut", "Account", null, new { @class = "btn btn-primary btn-sm rounded" })</p>
+                        <p>@Html.ActionLink("Reset Password", "ResetPassword", "Account")</p>
+                    }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        @Html.ActionLink("Create New Post", "Create", "BlogPosts")
+                    }
+
+                </div>
+            </div>
+        </div>
+        <!--===============================================================-->
+        <div class="sidebar-box">
+            <h3 class="heading">Categories</h3>
+            <ul class="categories">
+                <li><a href="#">Food <span>(12)</span></a></li>
+                <li><a href="#">Travel <span>(22)</span></a></li>
+                <li><a href="#">Lifestyle <span>(37)</span></a></li>
+                <li><a href="#">Business <span>(42)</span></a></li>
+                <li><a href="#">Adventure <span>(14)</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    @section scripts{       @*puts section scripts into layout @rendersection*@
+    <script src="~/Scripts/jquery-3.2.1.min.js"></script>
+    <script src="~/Scripts/jquery-migrate-3.0.0.js"></script>
+    <script src="~/Scripts/popper.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/owl.carousel.min.js"></script>
+    <script src="~/Scripts/jquery.waypoints.min.js"></script>
+    <script src="~/Scripts/jquery.stellar.min.js"></script>
+    <script src="~/Scripts/main.js"></script>
+
+    }
+
+}
+else
+{
+<meta http-equiv="refresh" content="0; URL='https://kchangblog.azurewebsites.net/'" />   @*Change to proper url once published*@
+}
