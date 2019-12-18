@@ -2,111 +2,17 @@
     ViewBag.Title = "About";
 }
 
-<header role="banner">
-    <div class="top-bar">
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <!-- <a href="#"><span class="fa fa-search"></span></a> -->
-                    @using (Html.BeginForm("Index", "BlogPosts", FormMethod.Get, htmlAttributes: new { @class = "form" }))
-                    {
-                        <div class="controls controls-row search-row float-right">
-                            <input id="searchStr" name="searchStr" class="search-top-form" type="text" placeholder="Search...">
-                            <button id="searchStr" name="searchStr" type="submit"><i class="fa fa-search"></i></button>
 
-                        </div>
-                    }
-                </div>
-            </div>
+<div class="col-8 py-3">
+    <div class="row pl-3">
+        <div class="col">
+            <h4>I'm Khumor Chang. Welcome to my Blog.</h4>
         </div>
     </div>
-
-    <div class="container logo-wrap">
-        <div class="row pt-5">
-            <div class="col-12 text-center">
-                <a class="absolute-toggle d-block d-md-none" data-toggle="collapse" href="#navbarMenu" role="button" aria-expanded="false" aria-controls="navbarMenu"><span class="burger-lines"></span></a>
-                <h1 class="site-logo">BLOG</h1>
-            </div>
-        </div>
-    </div>
-
-    <nav class="navbar navbar-expand-md  navbar-light bg-light">
-        <div class="container">
-            <div class="collapse navbar-collapse" id="navbarMenu">
-                <ul class="navbar-nav mx-auto">
-                    <li>
-                        <a href="~/">Home</a>
-                    </li>
-                    <li>
-                        <p>&#183</p>
-                    </li>
-                    <li>
-                        <a href="~/Home/About">About</a>
-                    </li>
-                    <li>
-                        <p>&#183</p>
-                    </li>
-                    <li>
-                        <a href="~/Home/Contact">Contact</a>
-                    </li>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <li>
-                            <p>&#183</p>
-                        </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Manage Posts", "Index", "BlogPosts")
-                        </li>
-                    }
-                    @if (!User.Identity.IsAuthenticated)
-                    {
-                        <li>
-                            <p>&#183</p>
-                        </li>
-                        <li>
-                            <a href="~/Account/Login">Login</a>
-                        </li>
-                        <li>
-                            <p>&#183</p>
-                        </li>
-                        <li>
-                            <a href="~/Account/Register">Register</a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li>
-                            <p>&#183</p>
-                        </li>
-                        <li>
-                            @Html.ActionLink("Log Out", "LogOut", "Account")
-                        </li>
-                    }
-
-                </ul>
-            </div>
-        </div>
-    </nav>
-</header>
-
-<div class="row pt-3">
-    <div class="col">
-        <div class="row-12">
-            <div class="col">
-                <h2>I'm Khumor Chang</h2>
-            </div>
-        </div>
-        <div class="row-12 pl-3">
-            <div class="col">
-                <h4>Welcome to my Blog.</h4>
-                <p>I'm a student at Coder Foundry currently studying to become a .NET developer.</p>
-                <a href="https://khumorchang.azurewebsites.net/">Click here</a> to visit my Website.
-            </div>
+    <div class="row pl-3">
+        <div class="col">
+            <p>I'm a student at Coder Foundry currently studying to become a .NET developer.</p>
+            <a href="https://khumorchang.azurewebsites.net/">Click here</a> to visit my Website.
         </div>
     </div>
 </div>
-
-
-
-
-

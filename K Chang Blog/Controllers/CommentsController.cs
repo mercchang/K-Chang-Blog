@@ -16,6 +16,7 @@ namespace K_Chang_Blog.Models
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Comments
+        [Authorize]
         public ActionResult Index()
         {
             var comments = db.Comments.Include(c => c.Author).Include(c => c.BlogPost);
@@ -23,6 +24,7 @@ namespace K_Chang_Blog.Models
         }
 
         // GET: Comments/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -50,6 +52,7 @@ namespace K_Chang_Blog.Models
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "BlogPostId, CommentBody")] Comment comment)
         {
@@ -69,6 +72,7 @@ namespace K_Chang_Blog.Models
         }
 
         // GET: Comments/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -89,6 +93,7 @@ namespace K_Chang_Blog.Models
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,BlogPostId,AuthorId,Created,Updated,CommentBody,UpdateReason")] Comment comment)
         {

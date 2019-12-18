@@ -1,100 +1,20 @@
 ﻿@using PagedList
 @using PagedList.Mvc
 @using K_Chang_Blog.Models
+@using Microsoft.AspNet.Identity
 @model BlogPost
 
 @{
     ViewBag.Title = "Details";
+    var db = new ApplicationDbContext();
+    var blogPost = db.BlogPosts.Find(Model.Id);
+    var comments = blogPost.Comments;
+    var user = db.Users.Find(User.Identity.GetUserId());
+    
 }
-<header role="banner">
-    <div class="top-bar">
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <!-- <a href="#"><span class="fa fa-search"></span></a> -->
-                    @using (Html.BeginForm("Index", "BlogPosts", FormMethod.Get, htmlAttributes: new { @class = "form" }))
-                    {
-                        <div class="controls controls-row search-row float-right">
-                            <input id="searchStr" name="searchStr" class="search-top-form" type="text" placeholder="Search...">
-                            <button id="searchStr" name="searchStr" type="submit"><i class="fa fa-search"></i></button>
 
-                        </div>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="container logo-wrap">
-        <div class="row pt-5">
-            <div class="col-12 text-center">
-                <a class="absolute-toggle d-block d-md-none" data-toggle="collapse" href="#navbarMenu" role="button" aria-expanded="false" aria-controls="navbarMenu"><span class="burger-lines"></span></a>
-                <h1 class="site-logo">BLOG</h1>
-            </div>
-        </div>
-    </div>
-
-    <nav class="navbar navbar-expand-md  navbar-light bg-light">
-        <div class="container">
-            <div class="collapse navbar-collapse" id="navbarMenu">
-                <ul class="navbar-nav mx-auto">
-                    <li>
-                        <a href="~/">Home</a>
-                    </li>
-                    <li>
-                        <p>&#183</p>
-                    </li>
-                    <li>
-                        <a href="~/Home/About">About</a>
-                    </li>
-                    <li>
-                        <p>&#183</p>
-                    </li>
-                    <li>
-                        <a href="~/Home/Contact">Contact</a>
-                    </li>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <li>
-                            <p>&#183</p>
-                        </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Manage Posts", "Index", "BlogPosts")
-                        </li>
-                    }
-                    @if (!User.Identity.IsAuthenticated)
-                    {
-                        <li>
-                            <p>&#183</p>
-                        </li>
-                        <li>
-                            <a href="~/Account/Login">Login</a>
-                        </li>
-                        <li>
-                            <p>&#183</p>
-                        </li>
-                        <li>
-                            <a href="~/Account/Register">Register</a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li>
-                            <p>&#183</p>
-                        </li>
-                        <li>
-                            @Html.ActionLink("Log Out", "LogOut", "Account")
-                        </li>
-                    }
-
-                </ul>
-            </div>
-        </div>
-    </nav>
-</header>
-
-<div class="col-md-9">
-    @* ==============================IMAGE======================================= *@
+<div class="col-8 pt-3">
     <div class="container-fluid">
         <section>
             @if (Model.ImagePath != null)
@@ -109,30 +29,29 @@
         <section>
             <div class="container">
                 <div class="row blog-entries element-animate">
-                    <div class="col-md-18 col-lg-8 main-content">
+                    <div class="col main-content">
                         <div class="post-meta">
                             <span class="author mr-2"><img src="~/Images/face.jpg" alt="Colorlib" class="mr-2"> Colorlib</span>&bullet;
                             <span class="mr-2">@Model.Created </span> &bullet;
                             <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
                         </div>
                         <h3 class="mb-4" style="text-align:center">@Model.Title</h3>
-                        <a class="category mb-5" href="#">Food</a> <a class="category mb-5" href="#">Travel</a>
 
-                        <div class="post-content-body">
+                        <div class="post-content-body pb-3">
                             <p>@Html.Raw(Model.BlogPostBody)</p>
                         </div>
-
+                        <hr />
                         <!-- comments -->
-                        <div class="pt-5">
-                            <h4 class="mb-5">Comments</h4>
+                        <div class="pt-2">
+                            <h4 class="mb-5">@Model.Comments.Count() Comments</h4>
                             @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
                             {
                                 <div class="container mt-3">
                                     <div class="media">
                                         <img src="~/Images/img_10.jpg" class="align-self-start mr-3" style="width:60px" />
                                         <div class="media-body">
-                                            <h3>@comment.AuthorId</h3>                             @*@comment.Author.Email*@
-                                            <div class="meta">@comment.Created</div>    @*@comment.Created.ToString("MMM dd, yyyy")*@
+                                            <h3>@comment.Author.DisplayName</h3>                             @*@comment.Author.Email*@
+                                            <div class="meta small">@comment.Created</div>    @*@comment.Created.ToString("MMM dd, yyyy")*@
                                             <p>@comment.CommentBody</p>
                                         </div>
                                     </div>
@@ -142,7 +61,7 @@
                             <div class="row mt-5">
                                 <div class="col-md-12 text-center">
                                     <nav aria-label="Page navigation" class="text-center">
-                                        @*@Html.PagedListPager(, page => Url.Action("Details", new { page }))*@PAGES
+                                        @*@Html.PagedListPager(comments, page => Url.Action("Details", new { page }))PAGES*@
                                     </nav>
                                 </div>
                             </div>
@@ -155,91 +74,26 @@
                                     {
                                         @Html.AntiForgeryToken()
                                         @Html.Hidden("BlogPostId", Model.Id)
-                                        @Html.TextArea("CommentBody", new { rows = 5, cols = 50, placeholder = "Add Comment..." });
-
-                                        <button type="submit" class="btn btn-sm btn-dark">Add Comment</button>
+                                        
+                                        <div class="col">
+                                            @Html.TextArea("CommentBody", new { rows = 5, cols = 70, placeholder = "Comment..." })
+                                        </div>
+                                        <div class="col">
+                                            <button type="submit" class="btn btn-sm btn-dark">Add Comment</button>
+                                        </div>
+                                        
                                     }
                                 </div>
                             }
 
                         </div>
                     </div>
-                    <!-- END main-content -->
                 </div>
             </div>
         </section>
     </div>
 </div>
 
-<div class="col pl-4">
-    <div class="sidebar-box search-form-wrap">
-        <!--BLANK SPACE-->
-    </div>
-    <!-- END sidebar-box -->
-    <!--================CHANGE THIS TO LOGGED IN USER=================-->
-    <div class="sidebar-box">
-        <div class="bio text-center">
-            @if (User.IsInRole("Admin"))
-            {
-                <img src="~/Images/face.jpg" alt="Image Placeholder" class="img-fluid">
-            }
-            else if (User.Identity.IsAuthenticated)
-            {
-                <img src="~/Images/default-face.jpg" alt="Image Placeholder" class="img-fluid">
-            }
-            else
-            {
-                <img src="~/Images/default-face.jpg" alt="Image Placeholder" class="img-fluid">
-            }
-            <div class="bio-body">
-                <h2>@User.Identity.Name</h2>
-                @if (User.IsInRole("Admin"))
-                {
-                    <p>Administrator</p>
-                }
-                else if (User.IsInRole("Moderator"))
-                {
-                    <p>Moderator</p>
-                }
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <p>You are logged in</p>
-                }
-                else
-                {
-                    <p>Please log in to post a comment</p>
-                }
-
-                @if (!User.Identity.IsAuthenticated)
-                {
-                    <p><a href="~/Account/Login" class="btn btn-primary btn-sm rounded">Log In</a></p>
-                    <p><a href="~/Account/Register">Register</a></p>
-                }
-                else
-                {
-                    <p>@Html.ActionLink("Log Out", "LogOut", "Account", null, new { @class = "btn btn-primary btn-sm rounded" })</p>
-                    <p>@Html.ActionLink("Reset Password", "ResetPassword", "Account")</p>
-                }
-                @if (User.IsInRole("Admin"))
-                {
-                    @Html.ActionLink("Create New Post", "Create", "BlogPosts")
-                }
-
-            </div>
-        </div>
-    </div>
-    <!--===============================================================-->
-    <div class="sidebar-box">
-        <h3 class="heading">Categories</h3>
-        <ul class="categories">
-            <li><a href="#">Food <span>(12)</span></a></li>
-            <li><a href="#">Travel <span>(22)</span></a></li>
-            <li><a href="#">Lifestyle <span>(37)</span></a></li>
-            <li><a href="#">Business <span>(42)</span></a></li>
-            <li><a href="#">Adventure <span>(14)</span></a></li>
-        </ul>
-    </div>
-</div>
 @section scripts{       @*puts section scripts into layout @rendersection*@
 <script src="~/Scripts/jquery-3.2.1.min.js"></script>
 <script src="~/Scripts/jquery-migrate-3.0.0.js"></script>

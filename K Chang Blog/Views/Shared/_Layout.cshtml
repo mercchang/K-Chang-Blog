@@ -1,4 +1,11 @@
-﻿<!doctype html>
+﻿@using K_Chang_Blog.Models
+@using Microsoft.AspNet.Identity
+@{ 
+    var db = new ApplicationDbContext();
+    var user = db.Users.Find(User.Identity.GetUserId());
+}
+
+<!doctype html>
 <html lang="en">
 <head>
     <title>Khumor Chang &mdash; Blog </title>
@@ -14,6 +21,7 @@
     <link href="~/fonts/ionicons/css/ionicons.min.css" rel="stylesheet" />
     <link href="~/fonts/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
     <link href="~/fonts/flaticon/font/flaticon.css" rel="stylesheet" />
+    <link href="~/fonts/fontawesome-free/css/fontawesome.min.css" rel="stylesheet" />
 
     <!-- Theme Style -->
     <link href="~/Content/style.css" rel="stylesheet" />
@@ -25,7 +33,148 @@
         <section class="site-section py-sm">
             <div class="container">
                 <div class="row blog-entries">
+                    <header role="banner">
+                        <div class="top-bar">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col">
+                                        <!-- <a href="#"><span class="fa fa-search"></span></a> -->
+                                        @using (Html.BeginForm("Index", "BlogPosts", FormMethod.Get, htmlAttributes: new { @class = "form" }))
+                                        {
+                                            <div class="controls controls-row search-row float-right">
+                                                <input id="searchStr" name="searchStr" class="search-top-form" type="text" placeholder="Search...">
+                                                <button id="searchStr" name="searchStr" type="submit"><i class="fa fa-search"></i></button>
+
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container logo-wrap">
+                            <div class="row pt-5">
+                                <div class="col-12 text-center">
+                                    <a class="absolute-toggle d-block d-md-none" data-toggle="collapse" href="#navbarMenu" role="button" aria-expanded="false" aria-controls="navbarMenu"><span class="burger-lines"></span></a>
+                                    <h1 class="site-logo">BLOG</h1>
+                                </div>
+                            </div>
+                        </div>
+
+                        <nav class="navbar navbar-expand-md  navbar-light bg-light">
+                            <div class="container">
+                                <div class="collapse navbar-collapse" id="navbarMenu">
+                                    <ul class="navbar-nav mx-auto">
+                                        <li>
+                                            <a href="~/">Home</a>
+                                        </li>
+                                        <li>
+                                            <p>&#183</p>
+                                        </li>
+                                        <li>
+                                            <a href="~/Home/About">About</a>
+                                        </li>
+                                        <li>
+                                            <p>&#183</p>
+                                        </li>
+                                        <li>
+                                            <a href="~/Home/Contact">Contact</a>
+                                        </li>
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <li>
+                                                <p>&#183</p>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="~/BlogPosts/Index">Manage All Posts</a>
+                                            </li>
+                                        }
+                                        @if (!User.Identity.IsAuthenticated)
+                                        {
+                                            <li>
+                                                <p>&#183</p>
+                                            </li>
+                                            <li>
+                                                <a href="~/Account/Login">Login</a>
+                                            </li>
+                                            <li>
+                                                <p>&#183</p>
+                                            </li>
+                                            <li>
+                                                <a href="~/Account/Register">Register</a>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li>
+                                                <p>&#183</p>
+                                            </li>
+                                            <li>
+                                                @Html.ActionLink("Log Out", "LogOut", "Account")
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </nav>
+                    </header>
+
                     @RenderBody()
+
+                    <div class="col-4 pl-4">
+                        <div class="sidebar-box search-form-wrap">
+                            <!--BLANK SPACE-->
+                        </div>
+                        <!-- END sidebar-box -->
+                        <!--================CHANGE THIS TO LOGGED IN USER=================-->
+                        <div class="sidebar-box">
+                            <div class="bio text-center">
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <img src="@user.AvatarPath" alt="Image Placeholder" class="img-fluid">
+                                }
+                                else
+                                {
+                                    <img src="~/Images/default-face.jpg" alt="Image Placeholder" class="img-fluid">
+                                }
+                                <div class="bio-body">
+                                    <h2>@User.Identity.Name</h2>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <p>Administrator</p>
+                                    }
+                                    else if (User.IsInRole("Moderator"))
+                                    {
+                                        <p>Moderator</p>
+                                    }
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <p>You are logged in</p>
+                                    }
+                                    else
+                                    {
+                                        <p>Please log in to post a comment</p>
+                                    }
+
+                                    @if (!User.Identity.IsAuthenticated)
+                                    {
+                                        <p><a href="~/Account/Login" class="btn btn-primary btn-sm rounded">Log In</a></p>
+                                        <p><a href="~/Account/Register">Register</a></p>
+                                    }
+                                    else
+                                    {
+                                        <p>@Html.ActionLink("Log Out", "LogOut", "Account", null, new { @class = "btn btn-primary btn-sm rounded" })</p>
+                                        <p>@Html.ActionLink("Change Password", "ChangePassword", "Manage")</p>
+                                    }
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        @Html.ActionLink("Create New Post", "Create", "BlogPosts")
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -45,10 +194,10 @@
                     <div class="col-md-6 ml-auto">
                         <div class="row">
                             <div class="col-md-7">
-                                <h3>Latest Post</h3>
+                                @*<h3>Latest Post</h3>
                                 <div class="post-entry-sidebar">
 
-                                </div>
+                                </div>*@
                             </div>
                             <div class="col-md-1"></div>
 
@@ -63,7 +212,7 @@
                         <p class="small">
                             <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                             Copyright &copy;
-                            <script>document.write(new Date().getFullYear());</script> All Rights Reserved | This template is made with <i class="fa fa-heart text-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                            <script>document.write(new Date().getFullYear());</script> <a href="https://colorlib.com" target="_blank">Colorlib</a>. Modified By K. Chang
                             <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                         </p>
                     </div>
@@ -76,7 +225,8 @@
 
     <!-- loader -->
     <div id="loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" /><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#f4b214" /></svg></div>
-
+    
+    <script src="~/fonts/fontawesome-free/js/fontawesome.min.js"></script>
     <script src="~/Scripts/jquery-3.2.1.min.js"></script>
     <script src="~/Scripts/jquery-migrate-3.0.0.js"></script>
     <script src="~/Scripts/popper.min.js"></script>

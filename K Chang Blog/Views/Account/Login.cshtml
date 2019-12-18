@@ -4,147 +4,54 @@
     ViewBag.Title = "Log in";
 }
 
-<header role="banner">
-    <div class="top-bar">
-        <div class="container">
+
+<div class="col-8">
+    <section id="loginForm">
+        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <h4 class="pt-3">Enter your email and password to log in</h4>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Enter Email..." })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-10">
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Enter Password..." })
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                </div>
+            </div>
             <div class="row">
                 <div class="col">
-                    <!-- <a href="#"><span class="fa fa-search"></span></a> -->
-                    @using (Html.BeginForm("Index", "BlogPosts", FormMethod.Get, htmlAttributes: new { @class = "form" }))
-                    {
-                        <div class="controls controls-row search-row float-right">
-                            <input id="searchStr" name="searchStr" class="search-top-form" type="text" placeholder="Search...">
-                            <button id="searchStr" name="searchStr" type="submit"><i class="fa fa-search"></i></button>
-
-                        </div>
-                    }
+                    <div class="checkbox">
+                        @Html.CheckBoxFor(m => m.RememberMe)
+                        @Html.LabelFor(m => m.RememberMe)
+                    </div>
+                </div>
+                <div class="col">
+                    <input type="submit" value="Log in" class="btn btn-default" />
                 </div>
             </div>
-        </div>
-    </div>
+            <div class="form-group">
 
-    <div class="container logo-wrap">
-        <div class="row pt-5">
-            <div class="col-12 text-center">
-                <a class="absolute-toggle d-block d-md-none" data-toggle="collapse" href="#navbarMenu" role="button" aria-expanded="false" aria-controls="navbarMenu"><span class="burger-lines"></span></a>
-                <h1 class="site-logo">BLOG</h1>
             </div>
-        </div>
-    </div>
-
-    <nav class="navbar navbar-expand-md  navbar-light bg-light">
-        <div class="container">
-            <div class="collapse navbar-collapse" id="navbarMenu">
-                <ul class="navbar-nav mx-auto">
-                    <li>
-                        <a href="~/">Home</a>
-                    </li>
-                    <li>
-                        <p>&#183</p>
-                    </li>
-                    <li>
-                        <a href="~/Home/About">About</a>
-                    </li>
-                    <li>
-                        <p>&#183</p>
-                    </li>
-                    <li>
-                        <a href="~/Home/Contact">Contact</a>
-                    </li>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <li>
-                            <p>&#183</p>
-                        </li>
-                        <li class="nav-item">
-                            @Html.ActionLink("Manage Posts", "Index", "BlogPosts")
-                        </li>
-                    }
-                    @if (!User.Identity.IsAuthenticated)
-                    {
-                        <li>
-                            <p>&#183</p>
-                        </li>
-                        <li>
-                            <p>Login</p>
-                        </li>
-                        <li>
-                            <p>&#183</p>
-                        </li>
-                        <li>
-                            <a href="~/Account/Register">Register</a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li>
-                            <p>&#183</p>
-                        </li>
-                        <li>
-                            @Html.ActionLink("Log Out", "LogOut", "Account")
-                        </li>
-                    }
-
-                </ul>
-            </div>
-        </div>
-    </nav>
-</header>
-
-
-<h2>@ViewBag.Title.</h2>
-
-<div class="row">
-    <div class="col-md-8">
-        <section id="loginForm">
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <h4>Use a local account to log in.</h4>
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <div class="checkbox">
-                            @Html.CheckBoxFor(m => m.RememberMe)
-                            @Html.LabelFor(m => m.RememberMe)
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Log in" class="btn btn-default" />
-                    </div>
-                </div>
-                <p>
-                    @Html.ActionLink("Register as a new user", "Register")
-                </p>
-                <p>
-                    @Html.ActionLink("Forgot your password?", "ForgotPassword")
-                </p>
-            }
-        </section>
-    </div>
-    <div class="col-md-4">
-        <section id="socialLoginForm">
-            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-        </section>
-    </div>
+            <p>
+                @Html.ActionLink("Register as a new user", "Register")
+            </p>
+            <p>
+                @Html.ActionLink("Forgot your password?", "ForgotPassword")
+            </p>
+        }
+    </section>
 </div>
+@*<div class="col-md-4">
+    <section id="socialLoginForm">
+        @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+    </section>
+</div>*@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
