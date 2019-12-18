@@ -503,7 +503,7 @@ header {
 .blog-entries .post-meta {
   margin-bottom: 20px;
   font-size: 14px;
-  color: #b3b3b3; }
+  color: #000; }
   .blog-entries .post-meta .author img {
     width: 30px;
     border-radius: 50%;

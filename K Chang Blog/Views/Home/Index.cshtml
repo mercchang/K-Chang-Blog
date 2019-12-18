@@ -15,7 +15,7 @@
     <!-- Top Image -->
     <div class="container-fluid">
         <div class="row pt-5 pb-5">
-            <img class="img-fluid" src="~/Images/bloghome.jpg" alt="Image placeholder">
+            <img class="img-fluid shadow" src="~/Images/bloghome.jpg" alt="Image placeholder">
         </div>
         <!-- END section -->
         <!-- Blog Posts Section -->
@@ -45,7 +45,7 @@
                                     <div class="post-meta">
                                         <span class="author mr-2"><img src="~/Images/face.jpg">   Khumor</span>&bullet;
                                         <span class="mr-2">@blogPost.Created </span> &bullet;
-                                        <span class="ml-2"><span class="fa fa-comments"></span> x comments</span>
+                                        <span class="ml-2"><span class="fa fa-comments"></span> @blogPost.Comments.Count() comments</span>
                                     </div>
                                 </div>
                                 <div class="row">

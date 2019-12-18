@@ -19,9 +19,8 @@
     <link href="~/Content/owl.carousel.min.css" rel="stylesheet" />
 
     <link href="~/fonts/ionicons/css/ionicons.min.css" rel="stylesheet" />
-    <link href="~/fonts/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+    <link href="~/fonts/fontawesome/css/font-awesome.min.css" rel="stylesheet" />
     <link href="~/fonts/flaticon/font/flaticon.css" rel="stylesheet" />
-    <link href="~/fonts/fontawesome-free/css/fontawesome.min.css" rel="stylesheet" />
 
     <!-- Theme Style -->
     <link href="~/Content/style.css" rel="stylesheet" />
@@ -127,7 +126,7 @@
                         </div>
                         <!-- END sidebar-box -->
                         <!--================CHANGE THIS TO LOGGED IN USER=================-->
-                        <div class="sidebar-box">
+                        <div class="sidebar-box shadow">
                             <div class="bio text-center">
                                 @if (User.Identity.IsAuthenticated)
                                 {
@@ -135,7 +134,7 @@
                                 }
                                 else
                                 {
-                                    <img src="~/Images/default-face.jpg" alt="Image Placeholder" class="img-fluid">
+                                    <img src="~/Avatars/default_user.jpg" alt="Image Placeholder" class="img-fluid">
                                 }
                                 <div class="bio-body">
                                     <h2>@User.Identity.Name</h2>
@@ -153,7 +152,7 @@
                                     }
                                     else
                                     {
-                                        <p>Please log in to post a comment</p>
+                                        <p>Please log in...</p>
                                     }
 
                                     @if (!User.Identity.IsAuthenticated)
