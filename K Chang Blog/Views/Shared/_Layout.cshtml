@@ -43,7 +43,6 @@
                                             <div class="controls controls-row search-row float-right">
                                                 <input id="searchStr" name="searchStr" class="search-top-form" type="text" placeholder="Search...">
                                                 <button id="searchStr" name="searchStr" type="submit"><i class="fa fa-search"></i></button>
-
                                             </div>
                                         }
                                     </div>
@@ -122,10 +121,8 @@
 
                     <div class="col-4 pl-4">
                         <div class="sidebar-box search-form-wrap">
-                            <!--BLANK SPACE-->
+                            
                         </div>
-                        <!-- END sidebar-box -->
-                        <!--================CHANGE THIS TO LOGGED IN USER=================-->
                         <div class="sidebar-box shadow">
                             <div class="bio text-center">
                                 @if (User.Identity.IsAuthenticated)
@@ -137,7 +134,11 @@
                                     <img src="~/Avatars/default_user.jpg" alt="Image Placeholder" class="img-fluid">
                                 }
                                 <div class="bio-body">
-                                    <h2>@User.Identity.Name</h2>
+                                    @if(User.Identity.IsAuthenticated)
+                                    {
+                                        <h2>@user.FullName</h2>
+                                    }
+
                                     @if (User.IsInRole("Admin"))
                                     {
                                         <p>Administrator</p>

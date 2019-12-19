@@ -141,10 +141,32 @@ namespace K_Chang_Blog.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Abstract,Created,Updated,BlogPostBody,Published,Slug")] BlogPost blogPost)
+        public ActionResult Edit([Bind(Include = "Id,Title,Abstract,Created,Updated,BlogPostBody,Published,Slug")] BlogPost blogPost, HttpPostedFileBase image)
         {
             if (ModelState.IsValid)
             {
+                var currentPost = db.BlogPosts.Find(blogPost.Id);
+
+                currentPost.Id = blogPost.Id;
+                currentPost.ImagePath = blogPost.ImagePath;
+                currentPost.Title = blogPost.Title;
+                currentPost.Published = blogPost.Published;
+                currentPost.Abstract = blogPost.Abstract;
+                currentPost.BlogPostBody = blogPost.BlogPostBody;
+                currentPost.Comments = blogPost.Comments;
+                currentPost.Created = blogPost.Created;
+
+                if (ImageUploadValidator.IsWebFriendlyImage(image))
+                {
+                    var fileName = Path.GetFileName(image.FileName);
+                    var justFileName = Path.GetFileNameWithoutExtension(fileName);
+                    justFileName = StringUtilities.URLFriendly(justFileName);
+                    fileName = $"{justFileName}_{DateTime.Now.Ticks}{Path.GetExtension(fileName)}";
+
+                    image.SaveAs(Path.Combine(Server.MapPath("~/Uploads/"), fileName));
+                    currentPost.ImagePath = "/Uploads/" + fileName;
+                }
+
                 var newSlug = StringUtilities.URLFriendly(blogPost.Title);
                 if (newSlug != blogPost.Slug)
                 {
@@ -158,11 +180,11 @@ namespace K_Chang_Blog.Controllers
                         ModelState.AddModelError("Title", "The title must be unique.");
                         return View(blogPost);
                     } 
-                    blogPost.Slug = newSlug;
+                    currentPost.Slug = newSlug;
                 }
                 
-                blogPost.Updated = DateTime.Now;
-                db.Entry(blogPost).State = EntityState.Modified;
+                currentPost.Updated = DateTime.Now;
+                db.Entry(currentPost).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index", "BlogPosts");
             }

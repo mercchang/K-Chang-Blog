@@ -10,19 +10,18 @@
     var blogPost = db.BlogPosts.Find(Model.Id);
     var comments = blogPost.Comments;
     var user = db.Users.Find(User.Identity.GetUserId());
-    
 }
 
 <div class="col-8 pt-3">
     <div class="container-fluid">
         <section>
-            @if (Model.ImagePath != null)
+            @if (blogPost.ImagePath != null)
             {
-                <img class="img-fluid mb-5" src=@Model.ImagePath alt="">
+                <img class="img-fluid mb-5" src=@blogPost.ImagePath alt="">
             }
             else
             {
-                <img src="~/Images/img_10.jpg" alt="Image" class="img-fluid mb-5"> @*placeholder img*@
+                <img src="~/Images/img_10.jpg" alt="Image" class="img-fluid mb-5">
             }
         </section>
         <section>
@@ -30,8 +29,8 @@
                 <div class="row blog-entries element-animate">
                     <div class="col main-content">
                         <div class="post-meta">
-                            <span class="author mr-2"><img src="~/Images/face.jpg" alt="Colorlib" class="mr-2"> Colorlib</span>&bullet;
-                            <span class="mr-2">@Model.Created </span> &bullet;
+                            <span class="author mr-2"><img src="~/Avatars/admin.png" alt="" class="mr-2"> K.Chang </span>&bullet;
+                            <span class="mr-2">@Model.Created.ToString("MMM dd, yyyy") </span> &bullet;
                             <span class="ml-2"><span class="fa fa-comments"></span> @Model.Comments.Count()</span>
                         </div>
                         <h3 class="mb-4" style="text-align:center">@Model.Title</h3>
@@ -42,16 +41,41 @@
                         <hr />
                         <!-- comments -->
                         <div class="pt-2">
-                            <h4 class="mb-5">@Model.Comments.Count() Comments</h4>
+                            <div class="row text-center">
+                                <div class="col">
+                                    <h5 class="mb-5">@Model.Comments.Count() Comments</h5>
+                                </div>
+                            </div>
+                            
                             @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
                             {
-                                <div class="container mt-3">
+                                <div class="container-fluid mt-3">
                                     <div class="media">
-                                        <img src="~/Images/img_10.jpg" class="align-self-start mr-3" style="width:60px" />
-                                        <div class="media-body">
-                                            <h3>@comment.Author.DisplayName</h3>                             @*@comment.Author.Email*@
-                                            <div class="meta small">@comment.Created</div>    @*@comment.Created.ToString("MMM dd, yyyy")*@
-                                            <p>@comment.CommentBody</p>
+                                        <div class="row">
+                                            <div class="col-2" style="width: 60px">
+                                                @if (comment.Author.AvatarPath != null)
+                                                {
+                                                    <img src="@comment.Author.AvatarPath" class="align-self-start mr-3 shadow" style="width:60px" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/Avatars/default_user.jpg" class="align-self-start mr-3 shadow" style="width:60px" />
+                                                }
+
+                                            </div>
+                                            <div class="col-9" style="width: 320px;">
+                                                <div class="media-body">
+                                                    <h5>@comment.Author.DisplayName</h5>
+                                                    <div class="meta small">@comment.Created</div>
+                                                    <p>@comment.CommentBody</p>
+                                                </div>
+                                            </div>
+                                            @if (comment.AuthorId == user.Id)
+                                            {
+                                                <div class="col-1 text-right">
+                                                    <a href="@Url.Action("Delete", "Comments", new { id = comment.Id })" class="btn btn-danger rounded">Delete</a>
+                                                </div>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -80,7 +104,6 @@
                                         <div class="col">
                                             <button type="submit" class="btn btn-sm btn-dark">Add Comment</button>
                                         </div>
-                                        
                                     }
                                 </div>
                             }
@@ -92,6 +115,7 @@
         </section>
     </div>
 </div>
+
 
 @section scripts{       @*puts section scripts into layout @rendersection*@
 <script src="~/Scripts/jquery-3.2.1.min.js"></script>

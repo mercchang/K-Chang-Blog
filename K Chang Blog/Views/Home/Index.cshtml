@@ -10,16 +10,9 @@
     var user = db.Users.Find(User.Identity.GetUserId());
 }
 
-@* BlogPosts *@
-<div class="col-md-8">
-    <!-- Top Image -->
-    <div class="container-fluid">
-        <div class="row pt-5 pb-5">
-            <img class="img-fluid shadow" src="~/Images/bloghome.jpg" alt="Image placeholder">
-        </div>
-        <!-- END section -->
-        <!-- Blog Posts Section -->
 
+<div class="col-md-8 py-3">
+    <div class="container-fluid">
         <div class="row">
             <div class="col">
                 <h2 class="mb-4" style="text-align:center">LATEST POSTS</h2>
@@ -43,7 +36,7 @@
                             <div class="blog-content-body">
                                 <div class="row">
                                     <div class="post-meta">
-                                        <span class="author mr-2"><img src="~/Images/face.jpg">   Khumor</span>&bullet;
+                                        <span class="author mr-2"><img src="~/Images/face.jpg">   K. Chang</span>&bullet;
                                         <span class="mr-2">@blogPost.Created </span> &bullet;
                                         <span class="ml-2"><span class="fa fa-comments"></span> @blogPost.Comments.Count() comments</span>
                                     </div>
@@ -72,9 +65,6 @@
         </div>
     </div>
 </div>
-
-@* Side Box *@
-
 
 @section scripts{       @*puts section scripts into layout @rendersection*@
 <script src="~/Scripts/jquery-3.2.1.min.js"></script>

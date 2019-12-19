@@ -4,18 +4,16 @@
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Comment</h4>
+<div class="col-8 py-3">
+    <h3>Are you sure you want to delete this comment?</h3>
     <hr />
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Author.FirstName)
         </dt>
 
-        <dd>
+        <dd class="pl-3">
             @Html.DisplayFor(model => model.Author.FirstName)
         </dd>
 
@@ -23,7 +21,7 @@
             @Html.DisplayNameFor(model => model.BlogPost.Title)
         </dt>
 
-        <dd>
+        <dd class="pl-3">
             @Html.DisplayFor(model => model.BlogPost.Title)
         </dd>
 
@@ -31,42 +29,45 @@
             @Html.DisplayNameFor(model => model.Created)
         </dt>
 
-        <dd>
+        <dd class="pl-3">
             @Html.DisplayFor(model => model.Created)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Updated)
-        </dt>
+        @if (Model.Updated != null)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Updated)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Updated)
-        </dd>
+            <dd class="pl-3">
+                @Html.DisplayFor(model => model.Updated)
+            </dd>
+        }
 
         <dt>
             @Html.DisplayNameFor(model => model.CommentBody)
         </dt>
 
-        <dd>
+        <dd class="pl-3">
             @Html.DisplayFor(model => model.CommentBody)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.UpdateReason)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UpdateReason)
-        </dd>
-
     </dl>
-
+    <hr />
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <div class="row">
+                <div class="col-3">
+                    @Html.ActionLink("Back to List", "Index")
+                </div>
+                <div class="col">
+                    <input type="submit" value="Delete" class="btn btn-default" />
+                </div>
+            </div>
+            
+            
         </div>
     }
 </div>

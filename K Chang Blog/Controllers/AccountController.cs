@@ -157,9 +157,11 @@ namespace K_Chang_Blog.Controllers
             {
                 var user = new ApplicationUser
                 {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
                     UserName = model.Email,
                     Email = model.Email,
-                    AvatarPath = "/Avatars/default_user.png"
+                    AvatarPath = "/Avatars/default_user.jpg"
                 };
 
                 if (avatar != null)

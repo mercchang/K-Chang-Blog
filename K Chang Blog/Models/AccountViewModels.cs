@@ -74,6 +74,17 @@ namespace K_Chang_Blog.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
 
+        [Display(Name = "First Name")]
+        [StringLength(50, MinimumLength = 1, ErrorMessage = "First name must have a minimum length of 1 and maximum length of 50.")]
+        public string FirstName { get; set; }
+
+        [Display(Name = "First Name")]
+        [StringLength(50, MinimumLength = 1, ErrorMessage = "Last name must have a minimum length of 1 and maximum length of 50.")]
+        public string LastName { get; set; }
+        [Display(Name = "Display Name")]
+        [StringLength(50, MinimumLength = 1, ErrorMessage = "Display name must have a minimum length of 1 and maximum length of 50.")]
+        public string DisplayName { get; set; }
+
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]

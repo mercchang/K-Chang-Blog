@@ -195,6 +195,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Avatars\admin.png" />
     <Content Include="Avatars\default_user.jpg" />
     <Content Include="Avatars\default_user.png" />
     <Content Include="Content\blog.css" />

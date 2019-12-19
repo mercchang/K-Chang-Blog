@@ -130,9 +130,10 @@ namespace K_Chang_Blog.Models
         public ActionResult DeleteConfirmed(int id)
         {
             Comment comment = db.Comments.Find(id);
+            var slug = comment.BlogPost.Slug;
             db.Comments.Remove(comment);
             db.SaveChanges();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Details", "BlogPosts", new { slug = slug });
         }
 
         protected override void Dispose(bool disposing)
